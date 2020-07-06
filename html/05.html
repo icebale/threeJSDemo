@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+	</head>
+	<body>
+		<script src="../js/zlib.js"></script>
+		<script src="../js/three.js"></script>
+
+		<script src="../js/three-js-helper.js"></script>
+
+		<script type="text/javascript">
+			function init() {
+				// 获取浏览器窗口的宽高，后续会用
+				var width = window.innerWidth
+				var height = window.innerHeight
+
+				// 创建一个场景
+				var scene = new THREE.Scene()
+
+				// 创建一个具有透视效果的摄像机
+				var camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 2000)
+
+				// 设置摄像机位置，并将其朝向场景中心
+				camera.position.x = 0
+				// camera.position.y = 10
+				// camera.position.z = 30
+				camera.position.y = 0
+				camera.position.z = 6
+				camera.lookAt(scene.position)
+
+				// 创建一个 WebGL 渲染器，Three.js 还提供 <canvas>, <svg>, CSS3D 渲染器。
+				var renderer = new THREE.WebGLRenderer({
+					antialias: true
+				})
+
+				renderer.setClearColor(0xffffff)
+				// 设置渲染器的清除颜色（即绘制下一帧前填充的颜色）和输出的 canvas 的尺寸
+				renderer.setSize(width, height);
+				var manager = new THREE.LoadingManager();
+				var loader = new THREE.FBXLoader(manager);
+				var object;
+				loader.load('../js/scene.fbx', function (obj) {
+					object = obj
+				}, function(data){
+					console.log(data)
+				}, function(err){
+					console.log(err)
+				})
+				// renderer.render(scene, camera);
+				(function animate() {
+					renderer.render(scene, camera);
+					//
+					// if (rotationBool) {
+					// 	cube.rotation.x += 0.01;
+					// 	cube.rotation.y += 0.01;
+					// }
+
+					requestAnimationFrame(animate);
+				})();
+
+				document.body.onclick = function () {
+					rotationBool = !rotationBool;
+				}
+
+
+			}
+			init();
+
+		</script>
+	</body>
+</html>
